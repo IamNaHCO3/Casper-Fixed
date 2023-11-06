@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}"{{#match @custom.color_scheme "Dark"}} class="dark-theme"{{else match @custom.color_scheme "Auto"}} class="dark-theme"{{/match}}>
+<head>
+
+    {{!-- Basic meta - advanced meta is output with {ghost_head} below --}}
+    <title>{{meta_title}}</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {{!-- Preload scripts --}}
+    <link rel="preload" as="style" href="{{asset "built/screen.css"}}" />
+    <link rel="preload" as="script" href="{{asset "built/casper.js"}}" />
+
+    {{!-- Theme assets - use the {asset} helper to reference styles & scripts,
+    this will take care of caching and cache-busting automatically --}}
+    <link rel="stylesheet" type="text/css" href="{{asset "built/screen.css"}}" />
+
+    <script>
+        let theme = localStorage.getItem("theme") || "auto";
+        let root = document.documentElement;
+        changeTheme(theme);
+
+        function changeTheme(targetTheme) {
+            theme = targetTheme;
+            localStorage.setItem("theme", targetTheme);
+            if (targetTheme === "auto") {
+                const hour = (new Date()).getHours();
+                targetTheme = hour > 6 && hour < 18 ? "light" : "dark";
+            }
+            if (targetTheme === "dark") {
+                root.className = "dark-theme";
+            } else {
+                root.className = "";
+            }
+        }
+
+        function nextTheme() {
+            const themes = ["auto", "light", "dark"];
+            const nextTheme = themes[(themes.indexOf(theme) + 1) % themes.length];
+            changeTheme(nextTheme);
+            changeSVG(nextTheme);
+        }
+    </script>
+
+    {{!-- This tag outputs all your advanced SEO meta, structured data, and other important settings,
+    it should always be the last tag before the closing head tag --}}
+    {{ghost_head}}
+
+</head>
+<body class="{{body_class}} is-head-{{#match @custom.navigation_layout "Logo on cover"}}left-logo{{else match @custom.navigation_layout "Logo in the middle"}}middle-logo{{else}}stacked{{/match}}{{#match @custom.title_font "=" "Elegant serif"}} has-serif-title{{/match}}{{#match @custom.body_font "=" "Modern sans-serif"}} has-sans-body{{/match}}{{#if @custom.show_publication_cover}} has-cover{{/if}}">
+<div class="viewport">
+
+    <header id="gh-head" class="gh-head outer{{#match @custom.header_style "Hidden"}} is-header-hidden{{/match}}">
+        <div class="gh-head-inner inner">
+            <div class="gh-head-brand">
+                <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
+                <button class="gh-color-mode gh-icon-btn" onclick="nextTheme()">{{> "icons/light-theme"}}</button>
+                <a class="gh-rss gh-icon-btn" href="/rss/" target="_blank">{{> "icons/rss"}}</a>
+                <a class="gh-head-logo{{#unless @site.logo}} no-image{{/unless}}" href="{{@site.url}}">
+                    {{#if @site.logo}}
+                        <img src="{{@site.logo}}" alt="{{@site.title}}">
+                    {{else}}
+                        {{@site.title}}
+                    {{/if}}
+                </a>
+                <button class="gh-burger"></button>
+            </div>
+
+            <nav class="gh-head-menu">
+                {{navigation}}
+                {{#unless @site.members_enabled}}
+                    {{#match @custom.navigation_layout "Stacked"}}
+                        <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search>{{> "icons/search"}}</button>
+                    {{/match}}
+                {{/unless}}
+            </nav>
+
+            <div class="gh-head-actions">
+                {{#unless @site.members_enabled}}
+                    {{^match @custom.navigation_layout "Stacked"}}
+                        <button class="gh-search gh-icon-btn" data-ghost-search>{{> "icons/search"}}</button>
+                        <button class="gh-color-mode gh-icon-btn" onclick="nextTheme()">{{> "icons/light-theme"}}</button>
+                        <a class="gh-rss gh-icon-btn" href="/rss/" target="_blank">{{> "icons/rss"}}</a>
+                    {{/match}}
+                {{else}}
+                    <button class="gh-search gh-icon-btn" data-ghost-search>{{> "icons/search"}}</button>
+                    <div class="gh-head-members">
+                        {{#unless @member}}
+                            {{#unless @site.members_invite_only}}
+                                <a class="gh-head-link" href="#/portal/signin" data-portal="signin">Sign in</a>
+                                <a class="gh-head-button" href="#/portal/signup" data-portal="signup">Subscribe</a>
+                            {{else}}
+                                <a class="gh-head-button" href="#/portal/signin" data-portal="signin">Sign in</a>
+                            {{/unless}}
+                        {{else}}
+                            <a class="gh-head-button" href="#/portal/account" data-portal="account">Account</a>
+                        {{/unless}}
+                    </div>
+                {{/unless}}
+            </div>
+        </div>
+    </header>
+
+    {{#is "post"}}
+    <progress class="reading-progress" value="0" max="100" aria-label="Reading progress"></progress>
+    {{/is}}
+    <div class="site-content">
+        {{!-- All other templates get inserted here, index.hbs, post.hbs, etc --}}
+        {{{body}}}
+    </div>
+
+    {{!-- The global footer at the very bottom of the screen --}}
+    <footer class="site-footer outer">
+        <div class="inner">
+            <section class="copyright"><a href="{{@site.url}}">{{@site.title}}</a> &copy; {{date format="YYYY"}}</section>
+            <nav class="site-footer-nav">
+<!--                {{navigation type="secondary"}}-->
+            </nav>
+            <a href="http://beian.miit.gov.cn/" target="_blank">粤ICP备2023118514号-1</a>
+            <div class="gh-powered-by"><a href="https://ghost.org/" target="_blank" rel="noopener">Powered by Ghost</a></div>
+        </div>
+    </footer>
+
+</div>
+{{!-- /.viewport --}}
+{{#is "post, page"}}
+    {{> "lightbox"}}
+{{/is}}
+
+{{!-- 思源字体 --}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Mono&family=Noto+Serif+SC&display=swap" rel="stylesheet">
+
+{{!-- Scripts - handle member signups, responsive videos, infinite scroll, floating headers, and galleries --}}
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.slim.min.js"></script>
+<script async src="{{asset "built/casper.js"}}"></script>
+<script defer>
+    $(document).ready(function () {
+        // Mobile Menu Trigger
+        $('.gh-burger').click(function () {
+            $('body').toggleClass('gh-head-open');
+        });
+        // FitVids - Makes video embeds responsive
+        $(".gh-content").fitVids();
+    });
+</script>
+<script>
+    function changeSVG(targetTheme) {
+        const SVGs = {
+            "auto": '{{> 'icons/auto-theme'}}',
+            "light": '{{> 'icons/light-theme'}}',
+            "dark": '{{> 'icons/dark-theme'}}'
+        };
+        $('.gh-color-mode').each(function (index, element) {
+            $(element).html(SVGs[targetTheme]);
+        });
+    }
+    changeSVG(theme);
+</script>
+
+{{!-- Ghost outputs required functional scripts with this tag - it should always be the last thing before the closing body tag --}}
+{{ghost_foot}}
+
+</body>
+</html>
