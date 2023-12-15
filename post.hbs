@@ -1,5 +1,5 @@
 {{!< default}}
-<link href="https://cdn.bootcdn.net/ajax/libs/tocbot/4.21.1/tocbot.min.css" rel="stylesheet">
+<link href="https://cdn.iamnahco3.cn/libs/tocbot/4.21.1/tocbot.min.css" rel="stylesheet">
 {{!-- The tag above means: insert everything in this file
 into the {body} tag of the default.hbs template --}}
 
@@ -116,6 +116,52 @@ into the {body} tag of the default.hbs template --}}
 {{/unless}}
 {{/if}}
 
+
+{{!-- Mathjax --}}
+<script type="text/javascript" id="MathJax-script" src="https://cdn.iamnahco3.cn/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        showProcessingMessages: false,
+        messageStyle: "none",
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+            inlineMath: [['$','$']],
+            displayMath: [['@','@']],
+            processEscapes: false,
+            processEnvironments: false,
+            processRefs: false,
+        },
+        "HTML-CSS": {
+            scale: 80,
+            showMathMenu: false,
+            adaptiveCSS: true,
+        },
+    });
+    function renderMath(element) {
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+        // 加载完毕后淡入
+        MathJax.Hub.Queue(() => {
+            element.style.transition = 'opacity 0.3s ease-in-out';
+            element.style.display = 'block';
+            element.style.opacity = '';
+            // 清空transition
+            setTimeout(() => {
+                element.style.transition = '';
+            }, 300);
+        });
+    }
+
+    document.querySelectorAll('.gh-content > *').forEach(element => {
+        element.style.opacity = '0';
+        element.style.display = 'none';
+    });
+
+    // 渲染document.querySelector('.gh-content > *')
+    document.querySelectorAll('.gh-content > *').forEach(element => {
+        renderMath(element);
+    });
+</script>
+
 {{!-- Gittalk --}}
 <div id="gitalk-container"></div>
 
@@ -156,7 +202,7 @@ into the {body} tag of the default.hbs template --}}
     requestAnimationFrame(updateProgress);
 </script>
 
-<script src="https://cdn.bootcdn.net/ajax/libs/tocbot/4.21.1/tocbot.min.js"></script>
+<script src="https://cdn.iamnahco3.cn/libs/tocbot/4.21.1/tocbot.min.js"></script>
 <script async>
     tocbot.init({
         // Where to render the table of contents.
@@ -170,42 +216,20 @@ into the {body} tag of the default.hbs template --}}
     });
 </script>
 
-{{!-- Mathjax --}}
-<script type="text/javascript" id="MathJax-script" src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script>
-    MathJax.Hub.Config({
-        showProcessingMessages: false,
-        messageStyle: "none",
-        jax: ["input/TeX", "output/HTML-CSS"],
-        tex2jax: {
-            inlineMath: [['$','$']],
-            displayMath: [['@','@']],
-            processEscapes: true,
-            processEnvironments: true,
-            processRefs: true,
-        },
-        CommonHTML: {
-            scale: 85,
-            availableFonts: ["STIX", "TeX"],
-            showMathMenu: false,
-            // linebreaks: { automatic: true },
-        },
-    });
-</script>
 
 {{!-- Highlight.js --}}
-<script id="HighlightJS-script" src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script id="HighlightJS-script" src="https://cdn.iamnahco3.cn/libs/highlight.js/11.8.0/highlight.min.js"></script>
 <script async>hljs.highlightAll();</script>
 <script defer>
     const HighlightJS_style = document.getElementById('HighlightJS-style');
-    HighlightJS_style.href = root.className === 'dark-theme' ? 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css' : 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.8.0/styles/github.min.css';
+    HighlightJS_style.href = root.className === 'dark-theme' ? 'https://cdn.iamnahco3.cn/libs/highlight.js/11.8.0/styles/github-dark.min.css' : 'https://cdn.iamnahco3.cn/libs/highlight.js/11.8.0/styles/github.min.css';
     root = new Proxy(root, {
         set(target, prop, newVal) {
             target[prop] = newVal;
             if (prop !== 'className') return true;
 
-            if (newVal === 'dark-theme') HighlightJS_style.href = 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css';
-            else HighlightJS_style.href = 'https://cdn.bootcdn.net/ajax/libs/highlight.js/11.8.0/styles/github.min.css';
+            if (newVal === 'dark-theme') HighlightJS_style.href = 'https://cdn.iamnahco3.cn/libs/highlight.js/11.8.0/styles/github-dark.min.css';
+            else HighlightJS_style.href = 'https://cdn.iamnahco3.cn/libs/highlight.js/11.8.0/styles/github.min.css';
             return true;
         },
     });
@@ -238,7 +262,7 @@ into the {body} tag of the default.hbs template --}}
     });
 </script>
 
-<script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+<script src="https://cdn.iamnahco3.cn/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
 <script defer>
     let clipboard = new ClipboardJS('.code-copy', {
         target: function (trigger) {
@@ -253,23 +277,27 @@ into the {body} tag of the default.hbs template --}}
     });
 </script>
 
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.8.0/gitalk.min.css">
-<script src="https://cdn.bootcdn.net/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
+<!--<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.8.0/gitalk.min.css">-->
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>-->
+<link rel="stylesheet" href="https://cdn.iamnahco3.cn/libs/gitalk/latest/gitalk.css">
+<script src="https://cdn.iamnahco3.cn/libs/gitalk/latest/gitalk.min.js"></script>
 <script defer type="text/javascript">
-    // 如果是草稿,就不加载
-    if (!window.location.pathname.startsWith('/p/') && !window.location.pathname.startsWith('/ghost/')) {
-        let gitalk = new Gitalk({
-            // Gitalk的主要参数
-            clientID: `db68eaed188d34690297`,
-            clientSecret: `f54735ade259245e415da9167619c95328d76edc`,
-            repo: `Blog-Comments`,
-            owner: 'IamNaHCO3',
-            admin: ['IamNaHCO3'],
-            id: location.pathname,      // Ensure uniqueness and length less than 50
-            distractionFreeMode: false  // Facebook-like distraction free mode
-        })
-        gitalk.render('gitalk-container')
-    }
+    window.onload = function () {
+        // 如果是草稿,就不加载
+        if (!window.location.pathname.startsWith('/p/') && !window.location.pathname.startsWith('/ghost/')) {
+            let gitalk = new Gitalk({
+                // Gitalk的主要参数
+                clientID: `db68eaed188d34690297`,
+                clientSecret: `f54735ade259245e415da9167619c95328d76edc`,
+                repo: `Blog-Comments`,
+                owner: 'IamNaHCO3',
+                admin: ['IamNaHCO3'],
+                id: location.pathname,      // Ensure uniqueness and length less than 50
+                distractionFreeMode: false  // Facebook-like distraction free mode
+            })
+            gitalk.render('gitalk-container')
+        }
+    };
 </script>
 
 {{/post}}
