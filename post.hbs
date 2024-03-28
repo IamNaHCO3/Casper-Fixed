@@ -158,8 +158,8 @@ into the {body} tag of the default.hbs template --}}
     let gh_content = document.querySelector("section.gh-content.gh-canvas")
     let loading = document.getElementById('load');
     MathJax.Hub.Queue(() => {
-        gh_content.style.display = 'grid';
         loading.style.display = 'none';
+        gh_content.style.display = 'grid';
         //跳转到url位置标识符的位置
         if (window.location.hash) {
             let hash = window.location.hash;
@@ -170,31 +170,6 @@ into the {body} tag of the default.hbs template --}}
             gh_content.style.opacity = '1';
         }, 0);
     });
-
-    // function renderMath(element) {
-    //     MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
-    //     // 加载完毕后淡入
-    //     MathJax.Hub.Queue(() => {
-    //         element.style.transition = 'opacity 0.3s ease-in-out';
-    //         element.style.display = 'block';
-    //         element.style.opacity = '';
-    //         // 清空transition
-    //         setTimeout(() => {
-    //             element.style.transition = '';
-    //         }, 300);
-    //     });
-    // }
-
-
-    // document.querySelectorAll('.gh-content > *').forEach(element => {
-    //     element.style.opacity = '0';
-    //     element.style.display = 'none';
-    // });
-    //
-    // // 渲染document.querySelector('.gh-content > *')
-    // document.querySelectorAll('.gh-content > *').forEach(element => {
-    //     renderMath(element);
-    // });
 </script>
 
 {{!-- Gittalk --}}
